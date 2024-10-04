@@ -105,4 +105,4 @@ State transitions are controlled by the input signal combinations, with the `Mer
 - **Code generation objectives**: Execution efficiency and RAM efficiency.
 
 ## Current the Assume seem to have some issues:
-![](”Pasted%20image.png“)
+![](”Assume.png“)
