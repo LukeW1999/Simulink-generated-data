@@ -104,5 +104,6 @@ State transitions are controlled by the input signal combinations, with the `Mer
 - **Code generation date**: October 3, 2024
 - **Code generation objectives**: Execution efficiency and RAM efficiency.
 
-## Current the Assume seem to have some issues:
+## issues 1:
 ![assume png](Assume.png)
+#found solution: because of the format disalignment. Many thanks to Dr. Xidan Song. Told me to use   int rtU_limits = nondet_bool(); instead of typedef unsigned char boolean_T; but this define is following the ARM 11 regulation. Need to talk with lucas.
