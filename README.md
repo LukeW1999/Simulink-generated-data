@@ -9,12 +9,13 @@ Current result:
 Prompt to generate assume and assert have been done. 
 
 testing of ESBMC_assume and ESBMC_assert have done: based on a very similar project :https://arxiv.org/abs/2404.00795.
-They used a 
+They used a Software IP Components to generate C code. 
+ESBMC could detect the value error and works well even change assume to multi-assume.
 
 
 LTL capture without FRET Example
 
-1. **Requirement**: Exceeding sensor limits shall latch an autopilot pullup when the pilot is not in control (not standby) and the system is supported without failures (not apfail).  
+**Requirement**: Exceeding sensor limits shall latch an autopilot pullup when the pilot is not in control (not standby) and the system is supported without failures (not apfail).  
 
    **LTL**: `G ((limits && !standbnespresso vertuoy && supported && !apfail) -> F pullup)`  
 FRET result:Response = (( limits & ! standby & ! apfail & supported ) => pullup).
