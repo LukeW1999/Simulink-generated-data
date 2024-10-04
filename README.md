@@ -1,27 +1,41 @@
-# Simulink-generated-data
-This task aims to test LTL property logic in embedded c code
+# Simulink-Generated-Data
 
-The code here is generated from Simulink model from NASA FRET project. ten lockheed martin cyber-physical challenge problems
+### **Project Overview**
+This project is aimed at testing Linear Temporal Logic (LTL) properties in embedded C code, which is generated from Simulink models from the NASA FRET project. The models used are part of the ten Lockheed Martin cyber-physical challenge problems.
 
-Requirement is litmited by Copyright 2016, Lockheed Martin Corporation. All rights reserved. So I cannot provide here. Here is the link https://github.com/hbourbouh/lm_challenges
+**Note**: The requirements are limited by **Copyright 2016, Lockheed Martin Corporation. All rights reserved**, and therefore cannot be provided in this repository. However, you can access the related challenge problems via the following link: [Lockheed Martin Cyber-Physical Challenge Problems](https://github.com/hbourbouh/lm_challenges).
 
-Current result:
-Prompt to generate assume and assert have been done. 
+### **Current Progress**
+- **Generation of Assumptions and Assertions**: The task of generating assume and assert statements has been completed.
+- **Testing ESBMC Assumptions and Assertions**: The testing has been performed based on a similar project, which is detailed in this [arxiv paper](https://arxiv.org/abs/2404.00795). The project used Software IP Components to generate C code. ESBMC successfully detected value errors and functioned correctly even with multi-assume statements.
 
-testing of ESBMC_assume and ESBMC_assert have done: based on a very similar project :https://arxiv.org/abs/2404.00795.
-They used a 
+### **LTL Capture Without FRET Example**
 
+#### **Requirement Example**:
+When exceeding sensor limits, the autopilot should latch the pullup if the pilot is not in control (not in standby) and the system is supported (not failed).
 
-LTL capture without FRET Example
+#### **LTL Expression**:
+\`\`\`LTL
+G ((limits && !standby && supported && !apfail) -> F pullup)
+\`\`\`
 
-1. **Requirement**: Exceeding sensor limits shall latch an autopilot pullup when the pilot is not in control (not standby) and the system is supported without failures (not apfail).  
+#### **FRET Tool Result**:
+Response = ((limits & !standby & !apfail & supported) => pullup).
 
-   **LTL**: `G ((limits && !standbnespresso vertuoy && supported && !apfail) -> F pullup)`  
-FRET result:Response = (( limits & ! standby & ! apfail & supported ) => pullup).
+Corresponding C code:
+\`\`\`c
+/* Requirement 1: When sensor limits are exceeded, the autopilot pullup should be latched */
 
-  /* Requirement 1: Exceeding sensor limits shall latch an autopilot pullup */
-  __ESBMC_assume(rtU.limits && !rtU.standby && rtU.supported && !rtU.apfail);
-  __ESBMC_assert(rtY.pullup, "Requirement 1 violated: Pullup should be latched");
+__ESBMC_assume(rtU_limits && !rtU_standby && rtU_supported && !rtU_apfail);
+__ESBMC_assert(rtY_pullup, \"Requirement 1 violated: Pullup should be latched\");
 
-LLM:
-Use two agent to avoid LLM momery lose and illusion problem.
+\`\`\`
+
+### **ESBMC Usage Example**
+To verify the generated C code with ESBMC, use the following command:
+\`\`\`bash
+esbmc ert_main.c fsm_12B.c -I ./ -I /usr/local/MATLAB/R2024b/simulink/include --symex-trace
+\`\`\`
+
+### **Avoiding LLM Memory Issues**
+Use two agents to prevent LLM memory loss and illusion problems.
