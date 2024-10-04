@@ -25,8 +25,10 @@ Response = ((limits & !standby & !apfail & supported) => pullup).
 Corresponding C code:
 \`\`\`c
 /* Requirement 1: When sensor limits are exceeded, the autopilot pullup should be latched */
-__ESBMC_assume(rtU.limits && !rtU.standby && rtU.supported && !rtU.apfail);
-__ESBMC_assert(rtY.pullup, \"Requirement 1 violated: Pullup should be latched\");
+
+__ESBMC_assume(rtU_limits && !rtU_standby && rtU_supported && !rtU_apfail);
+__ESBMC_assert(rtY_pullup, \"Requirement 1 violated: Pullup should be latched\");
+
 \`\`\`
 
 ### **ESBMC Usage Example**
