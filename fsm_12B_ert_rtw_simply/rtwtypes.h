@@ -67,7 +67,7 @@ typedef double real64_T;
  *===========================================================================*/
 typedef double real_T;
 typedef double time_T;
-typedef unsigned char boolean_T;
+typedef _Bool boolean_T;
 typedef int int_T;
 typedef unsigned int uint_T;
 typedef unsigned long ulong_T;

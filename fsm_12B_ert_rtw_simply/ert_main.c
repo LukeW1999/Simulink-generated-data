@@ -22,14 +22,14 @@
 #include <stddef.h>
 #include <stdio.h>            /* This example main program uses printf/fflush */
 #include "fsm_12B.h"                   /* Model header file */
-#include "assert.h"
 
 static RT_MODEL rtM_;
 static RT_MODEL *const rtMPtr = &rtM_; /* Real-time model */
 static DW rtDW;                        /* Observable states */
 
+_Bool nondet_bool();
 /* '<Root>/standby' */
-static boolean_T rtU_standby;
+static _Bool rtU_standby;
 
 /* '<Root>/apfail' */
 static boolean_T rtU_apfail;
@@ -72,6 +72,9 @@ void rt_OneStep(RT_MODEL *const rtM)
   /* Re-enable timer or interrupt here */
   /* Set model inputs here */
 
+  /* Step the model */
+  fsm_12B_step(rtM, rtU_standby, rtU_apfail, rtU_supported, rtU_limits,
+               &rtY_pullup);
 
   /* Get model outputs here */
 
@@ -92,6 +95,7 @@ void rt_OneStep(RT_MODEL *const rtM)
 int_T main(int_T argc, const char *argv[])
 {
   RT_MODEL *const rtM = rtMPtr;
+
   /* Unused arguments */
   (void)(argc);
   (void)(argv);
@@ -108,23 +112,23 @@ int_T main(int_T argc, const char *argv[])
    *
    *  rt_OneStep(rtM);
    */
-  /*
-   *
-   * write about the assertion here:*/
-
-  __ESBMC_assume(rtU_limits==1 && rtU_standby==0 && rtU_supported ==1 && rtU_apfail==0);
-  //__ESBMC_assume(rtU_limits==1 );
-  //__ESBMC_assume(rtU_standby==0 );
-  //__ESBMC_assume(rtU_supported==1 );
-  __ESBMC_assert(rtU_limits==0,"1");
-
-
-  /* Step the model */
-  //fsm_12B_step(rtM, rtU_standby, rtU_apfail, rtU_supported, rtU_limits, rtY_pullup);
-
-  //assert(rtU_limits == 1 );
-
-
+  printf("Warning: The simulation will run forever. "
+         "Generated ERT main won't simulate model step behavior. "
+         "To change this behavior select the 'MAT-file logging' option.\n");
+  fflush((NULL));
+  	
+  rtU_limits = nondet_bool();
+  rtU_standby = nondet_bool();
+  rtU_supported = nondet_bool();
+  rtU_apfail = nondet_bool();
+  rtY_pullup = nondet_bool();
+  //__ESBMC_assume(rtU_limits);
+  //__ESBMC_assert(rtU_limits,"11223");
+  __ESBMC_assume(rtU_limits && !rtU_standby && rtU_supported && !rtU_apfail);
+  rt_OneStep(rtM);
+  __ESBMC_assert(!rtY_pullup, "Requirement 1 violated: Pullup should be latched");
+    /*  Perform application tasks here */
+  
 
   /* The option 'Remove error status field in real-time model data structure'
    * is selected, therefore the following code does not need to execute.
