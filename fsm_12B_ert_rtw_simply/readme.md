@@ -104,3 +104,4 @@ State transitions are controlled by the input signal combinations, with the `Mer
 - **Code generation date**: October 3, 2024
 - **Code generation objectives**: Execution efficiency and RAM efficiency.
 
+![](/home/lukeubun/PhdProject/Simulink-generated-data/fsm_12B_ert_rtw_simply/Pasted image.png)
